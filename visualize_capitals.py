@@ -50,8 +50,8 @@ def print_country_for_capitals(model):
 normal_window_model = Word2Vec.load("normal_window_model")
 small_window_model = Word2Vec.load("small_window_model")
 
-plot_words(normal_window_model, "normal_window_countries_capitals.png")
-plot_words(small_window_model, "small_window_countries_capitals.png")
+plot_words(normal_window_model, "figs/normal_window_countries_capitals.png")
+plot_words(small_window_model, "figs/small_window_countries_capitals.png")
 
 print_most_similar(normal_window_model, ["österreich"])
 print_most_similar(small_window_model, ["österreich"])
