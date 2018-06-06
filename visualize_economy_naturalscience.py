@@ -11,7 +11,8 @@ economy_words = [
     "euro",
     "dollar",
     "inflation",
-    "arbeitslos"
+    "arbeitslos",
+    "reich"
 ]
 
 physics_words = [
@@ -24,10 +25,11 @@ physics_words = [
 
 biology_words = [
     "biologie",
-    "tiere",
-    "füße",
+    "gene",
+    "beine",
     "herz",
-    "leber"
+    "lunge",
+    "bakterien"
 ]
 
 naturalscience_words = physics_words + biology_words
@@ -40,6 +42,7 @@ combined_words = [
     "grenze",  # zwischen Ländern vs für Werte
     "organ",  # Institut vs Organ (Biologie)
     "arme",  # arme Personen vs Arme einer Person (Biologie)
+    "arm",
     "erben",  # Geld erben vs DNA erben (Biologie)
 ]
 
@@ -83,12 +86,54 @@ small_window_model = Word2Vec.load("small_window_model")
 plot_words(normal_window_model, "figs/normal_window_economy_naturalscience.png")
 plot_words(small_window_model, "figs/small_window_economy_naturalscience.png")
 
-print(normal_window_model.wv.most_similar(positive=["wirtschaft", "organ" ], topn=5))
-print(small_window_model.wv.most_similar(positive=["wirtschaft", "organ" ], topn=5))
-# [('verbandsorgan', 0.6706839799880981), ('unternehmertum', 0.6644313335418701), ('finanzwesen', 0.6638613939285278), ('agrarpolitik', 0.625726044178009), ('fachausschuss', 0.62508225440979)]
-# [('finanzwesen', 0.6784769296646118), ('frauenpolitik', 0.6730645895004272), ('bildungswesen', 0.6640677452087402), ('bildungspolitik', 0.6526181697845459), ('unternehmertum', 0.6525093913078308)]
+print(normal_window_model.wv.most_similar(positive=["leber", "herz", "lunge"], topn=5))
+print(small_window_model.wv.most_similar(positive=["leber", "herz", "lunge"], topn=5))
+# [('niere', 0.8039090633392334), ('nieren', 0.8003708124160767), ('magen', 0.78350430727005), ('milz', 0.7786546945571899), ('hirn', 0.776465117931366)]
+# [('niere', 0.7802958488464355), ('nieren', 0.7620891332626343), ('gebärmutter', 0.7612006068229675), ('milz', 0.7540740966796875), ('schilddrüse', 0.7426707744598389)]
 
-print(normal_window_model.wv.most_similar(positive=["biologie", "organ" ], topn=5))
-print(small_window_model.wv.most_similar(positive=["biologie", "organ" ], topn=5))
-# [('genetik', 0.7177324295043945), ('entomologie', 0.7023565173149109), ('virologie', 0.702241837978363), ('lehrbuch', 0.6861299276351929), ('mykologie', 0.6850222945213318)]
-# [('sportpädagogik', 0.6924142241477966), ('sozialmedizin', 0.6815182566642761), ('mykologie', 0.6803916692733765), ('sozialhygiene', 0.6773288249969482), ('psychologie', 0.6761468648910522)]
+print(normal_window_model.wv.most_similar(positive=["arm", "bein"], topn=5))
+print(small_window_model.wv.most_similar(positive=["arm", "bein"], topn=5))
+# [('unterarm', 0.8634679317474365), ('handgelenk', 0.8253477811813354), ('unterschenkel', 0.8162782192230225), ('oberschenkel', 0.8147163391113281), ('ellbogen', 0.8083438873291016)]
+# [('unterarm', 0.8030626773834229), ('handgelenk', 0.7994979619979858), ('oberarm', 0.7810859680175781), ('oberschenkel', 0.7748416066169739), ('knöchel', 0.7628743052482605)]
+
+print(normal_window_model.wv.most_similar(positive=["lebendig", "arm"], negative=["reich"], topn=5))
+print(small_window_model.wv.most_similar(positive=["lebendig", "arm"], negative=["reich"], topn=5))
+# [('leblos', 0.6285403966903687), ('versteinert', 0.6115909814834595), ('verkrüppelt', 0.6076324582099915), ('fürchterlich', 0.6031007766723633), ('geistesabwesend', 0.5885956883430481)]
+# [('leblos', 0.5918615460395813), ('verkrüppelt', 0.5835748314857483), ('gefesselt', 0.5736857652664185), ('sehend', 0.5733113288879395), ('oberkörper', 0.5618880391120911)]
+
+print(normal_window_model.similarity("arm", "bein"))
+print(normal_window_model.similarity("arm", "reich"))
+print(normal_window_model.similarity("arm", "besitzlos"))
+# 0.6806009454634425
+# 0.10973013916901389
+# 0.14481998860155842
+
+print(small_window_model.similarity("arm", "bein"))
+print(small_window_model.similarity("arm", "reich"))
+print(small_window_model.similarity("arm", "besitzlos"))
+# 0.6406667898287061
+# 0.25179555028233397
+# 0.1754358445531931
+
+print(normal_window_model.similarity("erben", "geld"))
+print(normal_window_model.similarity("erben", "gene"))
+print(normal_window_model.similarity("vererben", "geld"))
+print(normal_window_model.similarity("vererben", "gene"))
+# 0.37418759210127833
+# 0.07244948610288553
+# 0.3419726098723458
+# 0.1395088873826763
+
+print(small_window_model.similarity("erben", "geld"))
+print(small_window_model.similarity("erben", "gene"))
+print(small_window_model.similarity("vererben", "geld"))
+print(small_window_model.similarity("vererben", "gene"))
+# 0.41059506747134494
+# 0.10989564525191263
+# 0.42627524233988384
+# 0.18963249209746852
+
+print(normal_window_model.wv.most_similar(positive=["euro", "dollar", "yen"], topn=5))
+print(small_window_model.wv.most_similar(positive=["euro", "dollar", "yen"], topn=5))
+# [('gbp', 0.7996298670768738), ('rupien', 0.7676671743392944), ('peseten', 0.7548888325691223), ('chf', 0.7522148489952087), ('eur', 0.7432374954223633)]
+# [('peseten', 0.7984158992767334), ('gbp', 0.7947422862052917), ('rupien', 0.7789661288261414), ('rubel', 0.7781881093978882), ('pesos', 0.7672573328018188)]
